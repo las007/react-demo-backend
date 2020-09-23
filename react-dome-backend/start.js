@@ -3,8 +3,10 @@ const app = express();
 const router = require('./routes/test');
 
 class CreateServer {
+    $ctrl;
     constructor(props) {
-        this.props = props || {}
+        this.props = props || {};
+        this.$ctrl = { msg: '' };
     }
 
     start() {

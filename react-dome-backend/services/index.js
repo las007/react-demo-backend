@@ -1,6 +1,15 @@
-const { sign, verify } = require('./public');
+const {
+    sign,
+    verify,
+    forget,
+    getValidateCode,
+    tempCache, getHomePage } = require('./public');
 
 module.exports = {
     sign,
-    verify
+    verify,
+    forget,
+    getValidateCode,
+    tempCache,
+    getHomePage
 };

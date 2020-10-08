@@ -50,9 +50,9 @@ exports.getValidateCode = (req, res) => {
   res.send({ data: {}, msg: 'success', code: 200 })
 };
 
-exports.tempCache = (req, res) => {
-    console.log('log subLogin333..', req.body, req.params, req.headers);
-    res.send({ code: 200, msg: 'success', data: {} })
+exports.tempCache = (ctx) => {
+    console.log('log subLogin333..', ctx.req.body, ctx.req.params, ctx.req.headers);
+    ctx.res.send({ code: 200, msg: 'success', data: {} })
 };
 exports.getHomePage = (req, res) => {
     console.log('log get home page..');

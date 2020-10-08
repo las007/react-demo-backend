@@ -4,6 +4,7 @@ const {
     forget,
     getValidateCode,
     tempCache, getHomePage } = require('./public');
+const { getArticle, getQuestion, titleImage, testConnection } = require('./article');
 
 module.exports = {
     sign,
@@ -11,5 +12,9 @@ module.exports = {
     forget,
     getValidateCode,
     tempCache,
-    getHomePage
+    getHomePage,
+    getArticle,
+    getQuestion,
+    titleImage,
+    testConnection
 };

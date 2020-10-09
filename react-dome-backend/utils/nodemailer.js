@@ -3,12 +3,7 @@ const nodemailer = require('nodemailer');
 function mailer(to, subject, text) {
     console.log('log start mailer..');
     const transmit = nodemailer.createTransport({
-        /*host: 'smtp.qq.com',
-        port: 578,
-        auth: {
-            user: '305718901@qq.com',
-            pass: 'jgz132266'
-        }*/
+
         host: 'smtp.qq.com',
         port: 587,
         secure: false, //

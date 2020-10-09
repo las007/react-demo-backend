@@ -19,6 +19,10 @@ class CreateServer {
         this.$services = connect;
         this.$link = actionLink;
         this.$db = db;
+        //express 默认不能获取到 req.body 的值，必须加上 body-parser 中间件
+        this.$app.use(bodyParser.urlencoded({ extended: false/*, elementJSON: true*/ }));
+        this.$app.use(bodyParser.json());
+        //并且要在 app.use(router); 之前使用？！
         useRouter(this)
     }
 

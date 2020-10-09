@@ -66,7 +66,7 @@ module.exports = {
             console.log('log constRoute typeof...', typeof constRoute, constRoute, fileName);
 
             // /api/admin
-            const prefix = `/test/${fileName}`
+            const prefix = `/${fileName}`
             // 避免生成的 API 文件报错
             api[fileName] = []
             //传入 app 返回对象

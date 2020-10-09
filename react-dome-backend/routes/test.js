@@ -31,7 +31,7 @@ router.post('/section/uploadImage', section.uploadImage);
 
 //获取首页信息
 router.get('/public/getArticle', connect.getArticle);
-router.get('/public/getTitleImage', connect.getQuestion);
+router.get('/public/getQuestion', connect.getQuestion);
 router.get('/public/question/getQuestion', connect.titleImage);
 
 module.exports = router;

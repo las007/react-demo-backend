@@ -6,6 +6,7 @@ const { useRouter, conductor } = require("./babel-loader");
 const connect = require('./utils');
 const actionLink = require('./services');
 const db = require('./config/database');
+const connectDB = require('./config/connectDB');
 
 class CreateServer {
     constructor(props) {
@@ -19,6 +20,7 @@ class CreateServer {
         this.$services = connect;
         this.$link = actionLink;
         this.$db = db;
+        this.$connect = connectDB;
         //express 默认不能获取到 req.body 的值，必须加上 body-parser 中间件
         this.$app.use(bodyParser.urlencoded({ extended: false/*, elementJSON: true*/ }));
         this.$app.use(bodyParser.json());

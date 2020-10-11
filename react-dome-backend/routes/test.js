@@ -4,6 +4,8 @@ const services = require('../services/test');
 const connect = require('../services');
 const section = require('../services/section');
 const conductors = require('../conductor');
+const { uploadFunc } = require('../action/upload');
+
 
 router.get('/user/getUserInfo', services.userInfo);
 router.get('/public/getPublicKey', services.getPublicKey);
@@ -23,11 +25,16 @@ router.get('/public/getValue', connect.getValidateCode);
 router.get('/public/getHomePage', connect.getHomePage);
 // router.get('/test/getCtrl', this.$act.account.createAccount);
 
+//testing
 router.get('/test/conductors/testFunc', conductors.test(this).testFunc);
 console.log('log router something..', this.$act);
 console.log('log conductors..', conductors.test(this).testFunc);
+// router.get('/test/didRoute/:msg',services.didTesting);
+router.get('/test/didRoute/avatar/:msg',services.didTesting);
 
-router.post('/section/uploadImage', section.uploadImage);
+// router.post('/section/uploadImage', section.uploadImage);
+router.post('/section/uploadImage', uploadFunc);
+
 
 //获取首页信息
 router.get('/public/getArticle', connect.getArticle);

@@ -3,7 +3,9 @@ const {
     verify,
     forget,
     getValidateCode,
-    tempCache, getHomePage } = require('./public');
+    tempCache, getHomePage,
+    checkCode, resetPW } = require('./public');
+const assignment = require('./public');
 const { getArticle, getQuestion, titleImage, testConnection } = require('./article');
 
 module.exports = {
@@ -13,8 +15,13 @@ module.exports = {
     getValidateCode,
     tempCache,
     getHomePage,
+    checkCode,
+    resetPW,
+
+    assignment,
+
     getArticle,
     getQuestion,
     titleImage,
-    testConnection
+    testConnection,
 };

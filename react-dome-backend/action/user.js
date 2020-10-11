@@ -4,5 +4,9 @@ module.exports = app => ({
         //to do...
         //connect database && do something.
         return 123
+    },
+    register: (ctx) => {
+        console.log('log register..', ctx.req.body);
+        ctx.res.send({ code: 200, data: {}, msg: 'success' })
     }
 });

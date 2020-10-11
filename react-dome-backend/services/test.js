@@ -36,7 +36,8 @@ exports.subLogin = async (req, res) => {
     if (!req.body.isLogout) {
         // let sql = 'select * from account where username=? and password=?';
         // let sql = 'select * from account where username=?';
-        let sql = 'select * from admins where username=?';
+        // let sql = 'select * from admins where username=?';
+        let sql = `select * from users where name=?`;
 
         // let data = [req.body.username, req.body.password];
 
@@ -59,13 +60,20 @@ exports.subLogin = async (req, res) => {
 
             if (tempCapt === req.body.captcha) {
                 db.base(sql, data, result => {
-                    console.log('log res subLogin..', result, typeof result, result === null);
-                    console.log('log login result..', Object.keys(result).length);
+
                     // if (result) {
                     if (Object.keys(result).length > 0) {
-                        const token = sign({ username: req.body.username, password: req.body.password, publicKey: req.body.publicKey });
-                        res.send({ data: {token}, code: 200, msg: 'success' });
+                        console.log('log res subLogin..', result, typeof result, result === null, result[0].password);
+                        console.log('log login result..', Object.keys(result).length);
+                        if (result[0].name === req.body.username && result[0].password === req.body.password) {
+                            console.log('log user ifno..', result[0]);
+                            const token = sign({ username: req.body.username, password: req.body.password, publicKey: req.body.publicKey });
+                            res.send({ data: {token, avatar: result[0].avatar_url}, code: 200, msg: 'success' });
+                        }else {
+                            res.send({ code: 501, data: '账号或密码错误', msg: 'fail' })
+                        }
                     }else {
+                        console.log('log null result..', result);
                         res.send({ data: '查无此人！', code: 501, msg: 'fail' });
                     }
                 })
@@ -107,6 +115,14 @@ exports.test = (req, res) => {
     const getVal = getValue();
     console.log('log getVal2..', getVal);
     res.json({ code: 20000, data: decryptInfo, msg: 'success' })
+};
+
+//testing
+exports.didTesting = (req, res) => {
+    console.log('log did testing..', req.body, req.params);
+    res.sendFile(path.join(__dirname, `../static/avatar/${req.params.msg}`))
+    // res.sendFile(path.join(__dirname, `../static/${req.params.msg}`))
+    // res.send({ data: 'nothing', code: 200, msg: 'success' })
 };
 
 exports.getCaptcha = (req, res) => {

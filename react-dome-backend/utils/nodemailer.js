@@ -8,13 +8,13 @@ function mailer(to, subject, text) {
         port: 587,
         secure: false, //
         auth: {
-            user: '843006076@qq.com',
-            pass: 'lekjbvctotezbeei',
+            user: '205718901@qq.com',
+            pass: 'jofkubhcpprhbibg',
         },
     });
 
     let msg = transmit.sendMail({
-        from: '"网络管理员"<843006076@qq.com>',
+        from: '"网络管理员"<205718901@qq.com>',
         to: to || '205718901@qq.com',
         subject: subject || '[忘记密码，账号找回]',
         text: text || '请在30分钟内输入验证码..'

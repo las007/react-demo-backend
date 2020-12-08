@@ -3,9 +3,10 @@ module.exports = app => ({
         // this.$router.post()
         this.$services.sign();
     },
-    '/getTempCache, get': async (req, res) =>   {
+    '/getTempCache, get': (req, res) =>   {
         console.log('log temp this//', app);
         // this.$services.tempCache();
+        // console.log('log type2..', typeof app.$link.getArticle);
 
         // await app.$act.account.createAccount(app.ctx);
         app.$link.getArticle(app);
@@ -15,6 +16,12 @@ module.exports = app => ({
 */
         // app.$services.tempCache(app.ctx);
     },
+    '/getEventDetail/:eventId, get':  () => {
+        app.$link.getEventDetail(app);
+    },
+    '/like, post': () => {
+        app.$link.handleLike(app);
+    }
 });
 /*
 console.log('log this////', this);

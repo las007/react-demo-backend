@@ -4,7 +4,8 @@
   "description": "a react demo banckend...",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "node app.js"
   },
   "author": "",
   "license": "ISC",

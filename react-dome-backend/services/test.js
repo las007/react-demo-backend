@@ -8,7 +8,7 @@ const sign = require('../utils/jwtSign');
 const JWTDecode = require('jwt-decode');
 
 exports.userInfo = (req, res) => {
-    console.log('log userInfo..', req.body, req.params, req.headers);
+    // console.log('log userInfo..', req.body, req.params, req.headers);
 
     let sql = 'select * from user_info';
     db.base(sql, null, response => {
@@ -34,21 +34,14 @@ exports.subLogin = async (req, res) => {
     console.log('log subLogin..', req.body, req.params, req.headers);
 
     if (!req.body.isLogout) {
-        // let sql = 'select * from account where username=? and password=?';
-        // let sql = 'select * from account where username=?';
-        // let sql = 'select * from admins where username=?';
         let sql = `select * from users where name=?`;
-
-        // let data = [req.body.username, req.body.password];
-
         let data = [req.body.username];
 
         if (req.body && req.body.username !== 'undefined') {
+            console.log('log name.', req.body.username)
             // const tempCapt = getValue('captcha');
-
             const tempCapt = await text('captcha');
             console.log('log tempCapt..', tempCapt);
-
             /*Promise.resolve(tempCapt).then(res => {
                 console.log('log temp res..', res);
             });
@@ -60,14 +53,16 @@ exports.subLogin = async (req, res) => {
 
             if (tempCapt === req.body.captcha) {
                 db.base(sql, data, result => {
-
                     // if (result) {
                     if (Object.keys(result).length > 0) {
                         console.log('log res subLogin..', result, typeof result, result === null, result[0].password);
                         console.log('log login result..', Object.keys(result).length);
                         if (result[0].name === req.body.username && result[0].password === req.body.password) {
                             console.log('log user ifno..', result[0]);
-                            const token = sign({ username: req.body.username, password: req.body.password, publicKey: req.body.publicKey });
+                            const now = Date.parse(new Date()) / 1000
+                            const expTime = now + 60 * 60 * 0.5;
+
+                            const token = sign({ username: req.body.username, password: req.body.password, publicKey: req.body.publicKey, ext2: expTime });
                             res.send({ data: {token, avatar: result[0].avatar_url}, code: 200, msg: 'success' });
                         }else {
                             res.send({ code: 501, data: '账号或密码错误', msg: 'fail' })

@@ -9,5 +9,20 @@ module.exports = app => ({
     },
     '/info, get': () => {
         app.$act.user.getUserInfo(app.ctx);
+    },
+    '/writerInfo, post': () => {
+       app.$act.user.writerInfo(app.ctx)
+    } ,
+    '/myQA, post': () => {
+
+    },
+    '/myAnswer, post': () => {
+
+    },
+    '/deleteMyArticle, post': () => {
+        app.$act.user.deleteMyArticle(app.ctx);
+    },
+    '/createArticle, post': () => {
+        app.$act.user.createArticle(app.ctx)
     }
 });

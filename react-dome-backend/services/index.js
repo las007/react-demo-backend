@@ -6,7 +6,8 @@ const {
     tempCache, getHomePage,
     checkCode, resetPW } = require('./public');
 const assignment = require('./public');
-const { getArticle, getQuestion, titleImage, testConnection } = require('./article');
+const { getArticle, getQuestion, titleImage, testConnection,
+        getEventDetail, handleLike } = require('./article');
 
 module.exports = {
     sign,
@@ -24,4 +25,6 @@ module.exports = {
     getQuestion,
     titleImage,
     testConnection,
+    getEventDetail,
+    handleLike
 };

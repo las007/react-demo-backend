@@ -21,6 +21,9 @@ module.exports = app => ({
     },
     '/like, post': () => {
         app.$link.handleLike(app);
+    },
+    '/comment, post': () => {
+        app.$act.articles.addComment(app.ctx);
     }
 });
 /*

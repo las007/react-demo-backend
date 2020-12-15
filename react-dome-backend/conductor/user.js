@@ -28,7 +28,7 @@ module.exports = app => ({
         }
     },
     getUserInfo: async (ctx) => {
-        let sql = `select id, name, nickName, avatar_url from users where name=?`;
+        let sql = `select id, name, nickName, avatar_url, roleId from users where name=?`;
         let data = JWTDecode(ctx.req.headers.token).username;
         console.log('log now.', JWTDecode(ctx.req.headers.token).exp, Date.parse(new Date()) / 1000, JWTDecode(ctx.req.headers.token).exp < Date.parse(new Date()) / 1000)
 
@@ -80,16 +80,27 @@ module.exports = app => ({
     createArticle: async (ctx) => {
         console.log('log article..', ctx.req.body, ctx.req.headers);
 
-        let temp = ctx.req.body;
-        let sql = 'insert into articles set title=?, comment=?, imageUrl=?, richText=?, userId=?, time=?, days=?, people=?, fee=?';
-        let data = [temp.articleTitle, temp.content, temp.imageUrl, temp.introduction, null, temp.date, temp.days, temp.members, temp.outlay];
-        app.$db.base(sql, data, result => {
-            console.log('log add res.', result);
-            if (result === undefined) {
-                ctx.res.send({ code: 200, data: {}, message: 'nothing~'})
-            } else if (result.affectedRows === 1) {
-                ctx.res.send({ code: 200, data: {}, message: '保存成功' })
-            }
-        });
+        if (ctx.req.headers && ctx.req.headers.token !== 'null') {
+            let temp = ctx.req.body;
+
+            let sql_2 = `select * from users where name=?`;
+            let data_2 = [JWTDecode(ctx.req.headers.token).username];
+            console.log('log user role id.', JWTDecode(ctx.req.headers.token).username, await app.$connect(sql_2, data_2));
+            const userInfo = await app.$connect(sql_2, data_2);
+
+            let sql = 'insert into articles set title=?, comment=?, imageUrl=?, richText=?, userId=?, time=?, days=?, people=?, fee=?';
+            let data = [temp.articleTitle, temp.content, temp.imageUrl, temp.introduction, userInfo[0].roleId, temp.date, temp.days, temp.members, temp.outlay];
+
+            app.$db.base(sql, data, result => {
+                console.log('log add res.', result);
+                if (result === undefined) {
+                    ctx.res.send({ code: 200, data: {}, message: 'nothing~'})
+                } else if (result.affectedRows === 1) {
+                    ctx.res.send({ code: 200, data: {}, message: '保存成功' })
+                }
+            });
+        } else {
+            ctx.res.send({ code: 201, data: {}, message: '请登录！'})
+        }
     }
 });

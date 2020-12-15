@@ -62,7 +62,11 @@ exports.subLogin = async (req, res) => {
                             const now = Date.parse(new Date()) / 1000
                             const expTime = now + 60 * 60 * 0.5;
 
-                            const token = sign({ username: req.body.username, password: req.body.password, publicKey: req.body.publicKey, ext2: expTime });
+                            const token = sign({
+                                username: req.body.username,
+                                password: req.body.password,
+                                publicKey: req.body.publicKey,
+                                ext2: expTime });
                             res.send({ data: {token, avatar: result[0].avatar_url}, code: 200, msg: 'success' });
                         }else {
                             res.send({ code: 501, data: '账号或密码错误', msg: 'fail' })

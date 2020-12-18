@@ -33,7 +33,7 @@ module.exports = app => ({
                         let sql_3 = `insert into likecommentitems set commentitemId=?, userId=?, liked=?`;
                         let data_3 = [result[0].id, ctx.req.body.userId, like + 1];
 
-                        let sql_4 = `select * from likecommentitems where commentitemId=? and userId`;
+                        let sql_4 = `select * from likecommentitems where commentitemId=? and userId=?`;
                         let data_4 = [result[0].id, ctx.req.body.userId];
 
                         // let sql_5 = `update likecommentitems set liked=? where commentitemId=?`;

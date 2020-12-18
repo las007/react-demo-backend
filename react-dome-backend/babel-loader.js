@@ -195,7 +195,7 @@ module.exports = {
                     }
                     // Object.keys(conductors).forEach()
                     // Object.keys(conductors).push(action(app)[key]);
-                })
+                });
             }
         });
         console.log('log this conductors..', conductors);

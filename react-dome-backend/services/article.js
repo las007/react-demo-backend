@@ -24,24 +24,24 @@ exports.getArticle = async (app) => {
         Object.keys(app.ctx.req.headers && app.ctx.req.headers.token).length)
 
     const arr = [];
-    if (app.ctx.req.headers && app.ctx.req.headers.token !== 'null') {
-        const expTime = JWTDecode(app.ctx.req.headers.token).exp;
-        const now = Date.parse(new Date()) / 1000;
+    const { username } = app.ctx.req.headers.token !== 'null' ? JWTDecode(app.ctx.req.headers.token) : {};
+
+    if (username) {
         let sql_3 = `select id, name from users where name=?`;
-        let data_3 = JWTDecode(app.ctx.req.headers.token).username;
-        const userInfo = await app.$connect(sql_3, data_3);
-        console.log('log arti user', userInfo, userInfo.length);
+        const userInfo = await app.$connect(sql_3, username);
 
         let sql_4 = `select * from likearticles`;
         const likeArticles = await app.$connect(sql_4, null);
-        // console.log('log arti like.', likeArticles);
 
         likeArticles.forEach(item => {
-            // console.log('log arti item.', item);
             if (userInfo[0].id === item.userId) {
                 arr.push(item)
             }
         });
+    }
+
+    if (app.ctx.req.headers && app.ctx.req.headers.token !== 'null') {
+
     }
     console.log('log arti arr.', arr);
 
@@ -72,10 +72,12 @@ exports.getEventDetail = async (app) => {
     let sql2 = `select avatar_url, nickName from users where roleId=?`;
 
     let sql_10 = `select id from users where name=?`;
-    const username = JWTDecode(app.ctx.req.headers.token).username;
-    const userInfo = await app.$connect(sql_10, username);
-    console.log('log detail user.', userInfo[0]);
-
+    let currentUserInfo = [];
+    if (app.ctx.req.headers.token !== 'null') {
+        const username = JWTDecode(app.ctx.req.headers.token).username;
+        currentUserInfo = await app.$connect(sql_10, username);
+        console.log('log detail user.', currentUserInfo[0]);
+    }
 
     app.$db.base(sql, app.ctx.req.params.eventId, async result => {
         if (result.length > 0) {
@@ -113,10 +115,14 @@ exports.getEventDetail = async (app) => {
                                     item.nickName = tempInfo[0].nickName;
                                     item.isAlreadyLiked = false;
 
-                                    let sql_5 = `select * from likecommentitems where commentitemId=? and userId=?`;
-                                    let data_5 = [item.id, userInfo[0].id];
-                                    const commentInfos = await app.$connect(sql_5, data_5);
-                                    console.log('log com infos.', commentInfos);
+                                    let commentInfos = [];
+                                    if (currentUserInfo.length > 0) {
+                                        let sql_5 = `select * from likecommentitems where commentitemId=? and userId=?`;
+                                        let data_5 = [item.id, currentUserInfo[0].id];
+                                        commentInfos = await app.$connect(sql_5, data_5);
+                                        console.log('log com infos.', commentInfos);
+                                    }
+
                                     if (commentInfos.length > 0) {
                                         item.isAlreadyLiked = true;
                                     }
@@ -217,7 +223,7 @@ exports.handleLike = async (app) => {
 
 exports.getQuestion = (req, res) => {
     // let sql = 'select * from questions';
-    let sql = `select * from users inner join questions on questions.userId=users.roleId`;
+    let sql = `select users.nickName, users.avatar_url, questions.id, questions.title, questions.comment, questions.userId, questions.like, questions.createdAt from users inner join questions on questions.userId=users.roleId`;
 
     db.base(sql, null, result => {
         /*let sql3 = `select * from question inner join users userId=roleId`;

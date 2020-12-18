@@ -29,33 +29,45 @@ module.exports = app => ({
     },
     getUserInfo: async (ctx) => {
         let sql = `select id, name, nickName, avatar_url, roleId from users where name=?`;
-        let data = JWTDecode(ctx.req.headers.token).username;
-        console.log('log now.', JWTDecode(ctx.req.headers.token).exp, Date.parse(new Date()) / 1000, JWTDecode(ctx.req.headers.token).exp < Date.parse(new Date()) / 1000)
 
-        const expTime = JWTDecode(ctx.req.headers.token).exp;
-        const now = Date.parse(new Date()) / 1000;
-        const userInfo = await app.$connect(sql, data);
-        console.log('log user register..', userInfo, userInfo.length);
+        const { username } = ctx.req.headers.token !== 'null' ? JWTDecode(ctx.req.headers.token) : {};
+        if (username) {
+            console.log('log user name info.', username);
+            console.log('log now.', JWTDecode(ctx.req.headers.token).exp, Date.parse(new Date()) / 1000, JWTDecode(ctx.req.headers.token).exp < Date.parse(new Date()) / 1000);
 
-        if (expTime < now) {
-            ctx.res.send({ code: 301, data: '登录过期', msg: 'request' })
-        } else {
-            if (userInfo.length > 0) {
-                ctx.res.send({ code: 200, data: userInfo[0], msg: 'success' })
-            }else {
-                ctx.res.send({ code: 501, data: {}, msg: 'fail' })
+            const expTime = JWTDecode(ctx.req.headers.token).exp;
+            const now = Date.parse(new Date()) / 1000;
+            const userInfo = await app.$connect(sql, username);
+            console.log('log user register..', userInfo, userInfo.length);
+
+            if (expTime < now) {
+                ctx.res.send({ code: 301, data: '登录过期', msg: 'request' })
+            } else {
+                if (userInfo.length > 0) {
+                    ctx.res.send({ code: 200, data: userInfo[0], msg: 'success' })
+                }else {
+                    ctx.res.send({ code: 501, data: {}, msg: 'fail' })
+                }
             }
+        } else {
+            console.log('log user name info2.', username);
+            ctx.res.send({ code: 333, data: {}, msg: '无操作权限' })
         }
     },
     writerInfo: async (ctx) => {
-        console.log('log ctx.', ctx.req.body);
-
         if (ctx.req.body && ctx.req.body.id) {
-            let sql = `select * from users where id=?`;
-            let data = ctx.req.body.id
+            let sql = `select id, nickName, name, age, email, phoneNumber, comment_1, avatar_url, createdAt, updatedAt from users where id=?`;
+            let data = ctx.req.body.id;
             const writerDetail = await app.$connect(sql, data);
-            console.log('log writer.', writerDetail)
-            ctx.res.send({ code: 303, data: writerDetail, msg: 'testing' })
+            let getArticleList = `select id, title, richText, watch, isLike, imageUrl from articles where userId=?`;
+            app.$db.base(getArticleList, data, result => {
+                if (result.length > 0) {
+                    writerDetail[0].articleList = result;
+                    ctx.res.send({ code: 200, data: writerDetail, msg: 'success' })
+                } else {
+                    ctx.res.send({ code: 200, data: writerDetail, msg: 'success' })
+                }
+            });
         } else {
             ctx.res.send({ code: 501, data: {}, msg: '参数错误' })
         }

@@ -34,5 +34,20 @@ module.exports = app => ({
         console.log('log praiseQuestion..', ctx.res.body);
 
         ctx.res.send({ data: { text: 'connection'}, code: 200, msg: 'success' })
-    }
+    },
+    getQuestionDetail: (ctx) => {
+        let sql = `select users.nickName, users.avatar_url, questions.id, questions.title, questions.comment, questions.userId, questions.createdAt from questions inner join users on questions.id=?`;
+        if (ctx.req.query.id) {
+            app.$connect(sql, ctx.req.query.id).then(QaInfo => {
+                console.log('log get qa info.', QaInfo);
+                if (QaInfo.length > 0) {
+                    ctx.res.send({ code: 200, data: QaInfo[0], message: 'success' })
+                } else {
+                    ctx.res.send({ code: 301, data: {}, message: 'fail' })
+                }
+            });
+        } else {
+            ctx.res.send({ code: 999, data: '找不到数据', message: 'request' })
+        }
+    },
 });

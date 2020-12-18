@@ -20,5 +20,8 @@ module.exports = app => ({
     },
     '/testConnect/QA, get': () => {
         app.$link.testConnection(app);
-    }
+    },
+    '/getQaDetail, get': () => {
+        app.$act.question.getQuestionDetail(app.ctx);
+    },
 });

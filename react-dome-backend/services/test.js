@@ -63,6 +63,7 @@ exports.subLogin = async (req, res) => {
                             const expTime = now + 60 * 60 * 0.5;
 
                             const token = sign({
+                                id: result[0].id,
                                 username: req.body.username,
                                 password: req.body.password,
                                 publicKey: req.body.publicKey,

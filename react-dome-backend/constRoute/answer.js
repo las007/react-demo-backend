@@ -24,7 +24,20 @@ module.exports = app => ({
     },
     '/comment, post': () => {
         app.$act.articles.addComment(app.ctx);
-    }
+    },
+
+    //获取答案列表
+    '/getAnswerList, get': () => {
+        app.$act.answer.getAnswerList(app.ctx);
+    },
+    //发布回答
+        '/pubAnswerContent, post': () => {
+        app.$act.answer.pubAnswerContent(app.ctx);
+    },
+    //点赞 or 取消点赞
+    '/answerLike, post': () => {
+        app.$act.answer.answerLike(app.ctx);
+    },
 });
 /*
 console.log('log this////', this);
